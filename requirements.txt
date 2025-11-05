@@ -1,0 +1,14 @@
+Django>=5.0,<6.0
+djangorestframework>=3.14.0
+
+# PostgreSQL adapter (required because you're installing libpq-dev in Docker)
+#psycopg2>=2.9.9
+
+# API requests (to call news APIs)
+#requests>=2.31.0
+
+# OpenAI / ChatGPT API
+#openai>=1.0.0
+
+# For environment variables (.env file)
+#python-dotenv>=1.0.0
