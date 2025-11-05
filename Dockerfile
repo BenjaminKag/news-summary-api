@@ -3,9 +3,9 @@ LABEL maintainer="benjamink0612@gmail.com"
 
 ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 
-# System dependencies (for Postgres and compiling some python packages)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc build-essential libpq-dev \
+    libjpeg-dev zlib1g-dev \
   && rm -rf /var/lib/apt/lists/*
 
 COPY ./requirements.txt /tmp/requirements.txt
