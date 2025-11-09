@@ -1,3 +1,7 @@
-from django.contrib import admin  # noqa: F401
+from django.contrib import admin
+from .models import Source, Topic, Article, Summary
 
-# Register your models here.
+admin.site.register(Source)
+admin.site.register(Topic)
+admin.site.register(Article)
+admin.site.register(Summary)
