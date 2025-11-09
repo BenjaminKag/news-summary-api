@@ -6,6 +6,7 @@ from django.utils.text import slugify
 class TimeStamped(models.Model):
     """Abstract base class model that provides a 'created_at' field."""
     created_at = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         abstract = True
 
@@ -43,7 +44,8 @@ class Article(TimeStamped):
     """Article Object."""
     title = models.CharField(max_length=255)
     url = models.URLField(unique=True)
-    source = models.ForeignKey(Source, on_delete=models.PROTECT, related_name='articles')
+    source = models.ForeignKey(Source, on_delete=models.PROTECT,
+                               related_name='articles')
     published_at = models.DateTimeField(db_index=True)
     author = models.CharField(max_length=255, blank=True)
     content = models.TextField(blank=False)
@@ -59,7 +61,8 @@ class Article(TimeStamped):
 
 class Summary(TimeStamped):
     """Summary Object."""
-    article = models.OneToOneField(Article, on_delete=models.CASCADE, related_name='summary')
+    article = models.OneToOneField(Article, on_delete=models.CASCADE,
+                                   related_name='summary')
     text = models.TextField()
     model_name = models.CharField(max_length=255, default='baseline')
 
