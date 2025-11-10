@@ -1,3 +1,6 @@
+"""
+Core models for the news summary API.
+"""
 from django.db import models
 
 from django.utils.text import slugify

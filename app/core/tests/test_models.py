@@ -1,3 +1,6 @@
+"""
+Tests for core models.
+"""
 from django.test import TestCase
 from django.db import IntegrityError
 from django.db.models import ProtectedError
