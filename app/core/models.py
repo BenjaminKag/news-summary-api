@@ -18,7 +18,7 @@ class Source(TimeStamped):
     """Source Object."""
     name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(max_length=255, unique=True)
-    homepage = models.URLField(unique=True)
+    homepage = models.URLField(max_length=1000, unique=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -46,7 +46,7 @@ class Topic(TimeStamped):
 class Article(TimeStamped):
     """Article Object."""
     title = models.CharField(max_length=255)
-    url = models.URLField(unique=True)
+    url = models.URLField(max_length=1000, unique=True)
     source = models.ForeignKey(Source, on_delete=models.PROTECT,
                                related_name='articles')
     published_at = models.DateTimeField(db_index=True)

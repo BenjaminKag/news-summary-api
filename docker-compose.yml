@@ -7,6 +7,8 @@ services:
       args:
         DEV: "true"
     container_name: news_app
+    env_file:
+      - .env
     ports:
       - "8000:8000"
     volumes:
@@ -23,6 +25,9 @@ services:
     command: >
       sh -c "python manage.py wait_for_db &&
              python manage.py migrate &&
+             python manage.py fetch_articles --q technology --page-size 20 &&
+             # python manage.py summarize_articles --limit 20 || true &&
+             python manage.py tag_articles &&
              python manage.py runserver 0.0.0.0:8000"
 
   db:
