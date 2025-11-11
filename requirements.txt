@@ -1,6 +1,7 @@
 Django>=5.0,<6.0
 djangorestframework>=3.14.0
 psycopg2>=2.9.0,<3.0.0
+django-filter>=23.2
 
 # API requests (to call news APIs)
 #requests>=2.31.0
