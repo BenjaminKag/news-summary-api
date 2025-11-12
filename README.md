@@ -68,7 +68,9 @@ docker compose exec app python manage.py summarize_articles --limit 5   # small 
 
 4) **Run tests**
 ```bash
-docker compose exec app pytest -q
+docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py test"
+docker-compose run --rm app sh -c "flake8"
+
 ```
 
 ---
