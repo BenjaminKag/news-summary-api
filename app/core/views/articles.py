@@ -7,6 +7,9 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from django_filters.rest_framework import DjangoFilterBackend
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+
 from rest_framework.filters import OrderingFilter
 
 from core.models import Article, Summary
@@ -15,6 +18,7 @@ from core.filters import ArticleFilter
 from core.pagination import DefaultPagination
 
 
+@method_decorator(cache_page(60*5), name='list')
 class ArticleViewSet(ReadOnlyModelViewSet):
     """
     Endpoints:

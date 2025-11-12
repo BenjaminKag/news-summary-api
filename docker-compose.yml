@@ -27,7 +27,7 @@ services:
       sh -c "python manage.py wait_for_db &&
              python manage.py migrate &&
              python manage.py fetch_articles --q technology --page-size 20 &&
-             # python manage.py summarize_articles --limit 20 || true &&
+             python manage.py summarize_articles --limit 5 || true &&
              python manage.py tag_articles &&
              python manage.py runserver 0.0.0.0:8000"
 
@@ -46,6 +46,35 @@ services:
     container_name: news_redis
     ports:
       - "6379:6379"
+
+  fetcher:
+    build:
+      context: .
+      args:
+        DEV: "true"
+    container_name: news_fetcher
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DB_HOST=db
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASS=changeme
+      - NEWS_API_KEY=${NEWS_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+    restart: unless-stopped
+    command: >
+      sh -c "python manage.py wait_for_db &&
+             while true; do
+               echo '[fetcher] running at ' $(date) ;
+               python manage.py fetch_articles --q technology --page-size 20 || true ;
+               python manage.py tag_articles || true ;
+               python manage.py summarize_articles --limit 5 || true ;
+               echo '[fetcher] sleeping 6h' ;
+               sleep 21600 ;
+             done"
 
 volumes:
   dev-db-data:

@@ -10,7 +10,7 @@ class Command(BaseCommand):
     help = "Create Summaries for articles."
 
     def add_arguments(self, parser):
-        parser.add_argument("--limit", type=int, default=25)
+        parser.add_argument("--limit", type=int, default=5)
 
     def handle(self, *args, **opts):
         qs = (
