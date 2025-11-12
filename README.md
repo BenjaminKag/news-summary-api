@@ -80,17 +80,15 @@ docker-compose run --rm app sh -c "flake8"
 Base URL: `http://localhost:8000`
 API prefix: `/api`
 
-- `GET {{base_url}}{{api_prefix}}/articles/` — list articles (supports filters like `?tag=AI`, pagination)
-- `GET {{base_url}}{{api_prefix}}/articles/{id}/` — retrieve an article
-- `GET {{base_url}}{{api_prefix}}/sources/` — list sources
-- `GET {{base_url}}{{api_prefix}}/tags/` — list tags (if exposed)
-- (Read-only) `GET {{base_url}}{{api_prefix}}/summaries/{article_id}/` or nested in article serializer (depending on your serializers)
+- `GET {{base_url}}{{api_prefix}}/articles/`- Fetch a paginated list of articles from the database.
+- `GET {{base_url}}{{api_prefix}}/articles/{id}/` - Fetch details of a specific article by its ID.
+- `GET {{base_url}}{{api_prefix}}/articles/{id}/summary/` - Fetch a summary of an article using OpenAI.
 
 ### Curl examples
 ```bash
 curl "http://localhost:8000/api/articles/"
-curl "http://localhost:8000/api/articles/?tag=AI"
 curl "http://localhost:8000/api/articles/1/"
+curl "http://localhost:8000/api/articles/1/summary/"
 ```
 
 ---
