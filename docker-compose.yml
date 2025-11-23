@@ -20,6 +20,7 @@ services:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
       - NEWS_API_KEY=${NEWS_API_KEY}
+      - SECRET_KEY=${SECRET_KEY}
     depends_on:
       - db
       - redis
@@ -64,6 +65,7 @@ services:
       - NEWS_API_KEY=${NEWS_API_KEY}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - SECRET_KEY=${SECRET_KEY}
     restart: unless-stopped
     command: >
       sh -c "python manage.py wait_for_db &&

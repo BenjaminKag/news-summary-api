@@ -3,6 +3,8 @@ Service to ingest articles from an external news API.
 """
 import os
 import requests
+import logging
+from typing import Tuple
 from urllib.parse import urlparse
 from django.utils.dateparse import parse_datetime
 from core.models import Source, Article
@@ -10,9 +12,23 @@ from core.models import Source, Article
 NEWS_API_KEY = os.environ["NEWS_API_KEY"]
 NEWS_API_URL = "https://newsapi.org/v2/everything"
 
+logger = logging.getLogger(__name__)
 
-def fetch_and_store_articles(keyword: str = "technology", page_size: int = 50):
-    """Fetch articles and store/update by URL uniqueness."""
+
+class NewsApiError(Exception):
+    """Raised when NewsAPI fetch/parsing fails."""
+    pass
+
+
+def fetch_and_store_articles(keyword: str = "technology",
+                             page_size: int = 50) -> Tuple[int, int]:
+    """
+    Fetch articles from NewsAPI,
+    store/update them in the database,
+    and return a tuple: (created_count, updated_count).
+
+    Raises NewsApiError on failure.
+    """
     params = {
         "q": keyword,
         "pageSize": page_size,
@@ -20,11 +36,17 @@ def fetch_and_store_articles(keyword: str = "technology", page_size: int = 50):
         "sortBy": "publishedAt",
         "apiKey": NEWS_API_KEY,
     }
-    r = requests.get(NEWS_API_URL, params=params, timeout=30)
-    r.raise_for_status()
-    data = r.json()
+    try:
+        r = requests.get(NEWS_API_URL, params=params, timeout=30)
+        r.raise_for_status()
+        data = r.json()
+    except (requests.RequestException, ValueError) as exc:
+        logger.error("Failed to fetch or parse NewsAPI response.",
+                     exc_info=exc)
+        raise NewsApiError(
+            "Failed to fetch or parse articles from NewsAPI."
+        ) from exc
     created, updated = 0, 0
-
     for item in data.get("articles", []):
         url = item.get("url")
         if not url:

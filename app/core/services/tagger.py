@@ -14,7 +14,7 @@ TOPIC_KEYWORDS = {
 
 
 def _guess_topics(text: str) -> list[str]:
-    """Simple keyword-based topic guessing from text."""
+    """Returns a list of topic names detected in the text."""
     t = (text or "").lower()
     matched = []
     for canonical, keywords in TOPIC_KEYWORDS.items():
@@ -24,7 +24,12 @@ def _guess_topics(text: str) -> list[str]:
 
 
 def tag_article(article: Article, max_topics: int = 5) -> int:
-    """ Attach Topics to articles."""
+    """
+    Assign keyword-based topics to an article.
+
+    Returns:
+        int: Number of topics attached.
+    """
     blob = f"{article.title}\n{article.content or ''}"
     names = _guess_topics(blob)[:max_topics]
     if not names:
